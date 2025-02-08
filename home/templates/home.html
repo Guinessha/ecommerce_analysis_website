@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metrics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .step-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <img src="{% static 'agora-metrics.png' %}" alt="Smallpdf Logo" class="w-10 h-10">
+                <span class="text-xl font-bold text-gray-800">Metrics</span>
+            </div>
+        </nav>
+    </header>
+
+    <p>{{ error }}</p>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        <!-- Upload Section -->
+        <section class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Upload Your Dataset</h1>
+            <p class="text-gray-600 mb-6">
+                Struggling with messy sales data? Our tool organizes and visualizes your sales performance in just a few clicks!
+            </p>
+            
+            <!-- File Upload Box -->
+            <div class="border-2 border-dashed border-blue-200 bg-blue-50 rounded-xl p-8 mb-6 transition-all hover:border-blue-300">
+                <form action="{% url 'upload' %}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="flex flex-col items-center">
+                        <img src="{% static 'upload-big.png' %}" alt="Icon" class="w-20 h-20 mb-4 opacity-75">
+                        <label class="cursor-pointer">
+                            <input type="file" name="file" accept=".csv" class="hidden" id="fileInput">
+                            <span class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                                Choose File
+                            </span>
+                        </label>
+                        <p id="fileName" class="text-gray-500 text-sm mt-4"></p>
+                        <button type="submit" id="uploadButton" class="mt-4 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors hidden">
+                            Upload File
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Features List -->
+            <ul class="space-y-3 text-gray-600 text-left max-w-xs mx-auto">
+                <li class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    <span>Easily Analyze Your Sales Data!</span>
+                </li>
+                <li class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    <span>Upload Your Data, Get Insights, and Boost Sales!</span>
+                </li>
+                <li class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    <span>Turn Your Sales Data into Actionable Insights!</span>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- How to Use the Website -->
+    <div class="container mx-auto px-4 ">
+        <h1 class="text-3xl font-bold text-center mb-12">How to Use the Website</h1>
+        
+        <div class="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-8">
+            <!-- Step 1 -->
+            <div class="step-card bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center w-72">
+                <div class="bg-blue-500 text-white rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                    <i data-lucide="upload" class="w-8 h-8"></i>
+                </div>
+                <h2 class="text-xl font-semibold mb-2">Upload Dataset</h2>
+                <p class="text-gray-600 text-sm">Click the "Choose File" button to upload your sales dataset in CSV format.</p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center w-72">
+                <div class="bg-green-500 text-white rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                    <i data-lucide="bar-chart-3" class="w-8 h-8"></i>
+                </div>
+                <h2 class="text-xl font-semibold mb-2">Data Analysis</h2>
+                <p class="text-gray-600 text-sm">The system will automatically clean the data and display the analysis results.</p>
+            </div>
+
+            <!-- Step 3 (Start Predicting Now) -->
+            <div class="step-card bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center w-72">
+                <div class="bg-purple-500 text-white rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                    <i data-lucide="brain-circuit" class="w-8 h-8"></i>
+                </div>
+                <h2 class="text-xl font-semibold mb-2">Start Predicting Now</h2>
+                <p class="text-gray-600 text-sm">Use the machine learning model to predict trends and gain deeper insights.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-white shadow-lg rounded-lg p-6 max-w-lg w-full">
+            <h1 class="text-3xl font-bold text-center text-gray-800 mb-4">Dataset Upload Guidelines</h1>
+            <p class="text-gray-600 mb-4">Ensure your dataset includes the following columns:</p>
+            <div class="space-y-3">
+                <div class="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg">
+                    <span class="text-blue-500 font-semibold">customer_id:</span>
+                    <span class="text-gray-700">Unique identifier for each customer</span>
+                </div>
+                <div class="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg">
+                    <span class="text-blue-500 font-semibold">gender:</span>
+                    <span class="text-gray-700">Customer's gender (Male/Female/Other)</span>
+                </div>
+                <div class="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg">
+                    <span class="text-blue-500 font-semibold">age:</span>
+                    <span class="text-gray-700">Customer's age</span>
+                </div>
+                <div class="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg">
+                    <span class="text-blue-500 font-semibold">product_category:</span>
+                    <span class="text-gray-700">Category of the purchased product</span>
+                </div>
+                <div class="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg">
+                    <span class="text-blue-500 font-semibold">quantity:</span>
+                    <span class="text-gray-700">Number of items purchased</span>
+                </div>
+                <div class="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg">
+                    <span class="text-blue-500 font-semibold">invoice_date:</span>
+                    <span class="text-gray-700">Date of purchase (YYYY-MM-DD format)</span>
+                </div>
+                <div class="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg">
+                    <span class="text-blue-500 font-semibold">unit_price:</span>
+                    <span class="text-gray-700">Price per unit of the product</span>
+                </div>
+                <div class="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg">
+                    <span class="text-blue-500 font-semibold">total_sales:</span>
+                    <span class="text-gray-700">Total sales amount (quantity × unit_price)</span>
+                </div>
+            </div>
+            <p class="text-gray-600 mt-4">Ensure that your file is in CSV format before uploading.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const fileNameDisplay = document.getElementById('fileName');
+            const uploadButton = document.getElementById('uploadButton');
+            const file = event.target.files[0];
+
+            if (file) {
+                fileNameDisplay.textContent = file.name;
+                uploadButton.classList.remove('hidden');
+            } else {
+                fileNameDisplay.textContent = '';
+                uploadButton.classList.add('hidden');
+            }
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

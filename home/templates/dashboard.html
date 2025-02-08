@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #cff3f8, #f8cad9);
+        }
+    </style>
+</head> 
+<body class="gradient-bg font-sans min-h-screen flex items-center justify-center font-sans">
+    <div class="max-w-6xl mx-auto p-6">
+        <header class="mb-6 text-center">
+            <h1 class="text-4xl font-extrabold text-gray-900 tracking-wide uppercase">Dashboard</h1>
+            <p class="text-gray-600 mt-2 text-lg">Your data, insights, and predictions in one place</p>
+        </header>
+        
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white p-6 rounded-3xl shadow relative">
+                <!-- Ikon di pojok kanan atas -->
+                <div class="absolute top-6 right-8">
+                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+            
+                <!-- Total Sales di pojok bawah kiri -->
+                <div class="absolute bottom-6 left-8">
+                    <p class="text-3xl font-bold text-gray-800">${{ charts.total_sales }}</p>
+                </div>
+            
+                <!-- Total Sales dan This Year di pojok kanan -->
+                <div class="absolute top-6 left-8 text-left">
+                    <h2 class="text-xl font-semibold text-gray-600">Total Sales</h2>
+                    <span class="text-gray-500 text-lg">This Year</span>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-3xl shadow relative">
+                <!-- Ikon di pojok kanan atas -->
+                <div class="absolute top-6 right-8">
+                    <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
+                </div>
+            
+                <!-- Total Products Sold di pojok bawah kiri -->
+                <div class="absolute bottom-6 left-8">
+                    <p class="text-3xl font-bold text-gray-800">{{ charts.total_quantity }}</p>
+                </div>
+            
+                <!-- Total Products Sold dan All time di pojok kanan -->
+                <div class="absolute top-6 left-8 text-left">
+                    <h2 class="text-xl font-semibold text-gray-600">Total Order</h2>
+                    <span class="text-gray-500 text-lg">This Year</span>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-3xl shadow text-center">
+                <h2 class="text-lg font-semibold text-gray-600">Unlock Predictive Insights</h2>
+                <p class="text-xl font-bold text-gray-800">Make Data-Driven Decisions</p>
+                <a href="#" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                    Coming Soon
+                </a>
+            </div>            
+        </div>
+
+        <!--Top Charts-->
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-6">
+            <div class="bg-white p-6 rounded-3xl shadow">
+                <h2 class="text-2xl font-semibold text-gray-600 mb-4 text-center">Total Sales Trend Per Month</h2>
+                {% if charts.sales_over_time %}
+                <img src="data:image/png;base64,{{ charts.sales_over_time }}" alt="Sales Over Time" class="w-full h-auto">
+                {% else %}
+                <p class="text-gray-500">No data available.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="bg-white p-6 rounded-3xl shadow">
+                <h2 class="text-2xl font-semibold text-gray-600 mb-4 text-center">Top 10 Customers with Highest Sales</h2>
+                {% if charts.top_customers %}
+                <img src="data:image/png;base64,{{ charts.top_customers }}" alt="Top 10 Customers with Highest Sales" class="w-full h-auto">
+                {% else %}
+                <p class="text-gray-500">No data available.</p>
+                {% endif %}
+            </div>
+            <div class="bg-white p-6 rounded-3xl shadow">
+                <h2 class="text-2xl font-semibold text-gray-600 mb-4 text-center">Sales by Category</h2>
+                {% if charts.sales_by_category %}
+                <img src="data:image/png;base64,{{ charts.sales_by_category }}" alt="Sales by Category" class="w-full h-auto">
+                {% else %}
+                <p class="text-gray-500">No data available.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="bg-white p-6 rounded-3xl shadow">
+                <h2 class="text-2xl font-semibold text-gray-600 mb-4 text-center">Age Distribution</h2>
+                {% if charts.age_distribution %}
+                <img src="data:image/png;base64,{{ charts.age_distribution }}" alt="Age Distribution" class="w-full h-auto">
+                {% else %}
+                <p class="text-gray-500">No data available.</p>
+                {% endif %}
+            </div>
+            <div class="bg-white p-6 rounded-3xl shadow">
+                <h2 class="text-2xl font-semibold text-gray-600 mb-4 text-center">Quantity vs Total Sales</h2>
+                {% if charts.quantity_vs_total_sales %}
+                <img src="data:image/png;base64,{{ charts.quantity_vs_total_sales }}" alt="Quantity vs Total Sales" class="w-full h-auto">
+                {% else %}
+                <p class="text-gray-500">No data available.</p>
+                {% endif %}
+            </div>
+        </div>
+<!--        <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <a href="" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+                Download PDF
+            </a>
+-->            
+        </div> 
+    </div>
+</body>
+</html>
